@@ -1,0 +1,63 @@
+## Rename this file to docker-compose.yml to use it.
+
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "7777:5134"
+    depends_on:
+      - backend
+    restart: always
+
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "4000:4000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: #your postgres url
+      DATABASE_TYPE: #your postgres type
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DATABASE_USER: #your postgres user
+      DATABASE_NAME: #your postgres database
+      DATABASE_PASSWORD: #your postgres password
+    restart: always
+
+  db:
+    image: postgres:14
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: #your postgres username
+      POSTGRES_PASSWORD: #your postgres password
+      POSTGRES_DB: #your postgres databse
+    healthcheck:
+      test: pg_isready -U postgres -d quiz
+      timeout: 20s
+      retries: 10
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - pgadmindata:/var/lib/pgadmin
+
+volumes:
+  pgdata:
+  pgadmindata:
