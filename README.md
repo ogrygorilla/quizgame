@@ -37,4 +37,6 @@
           The database service is internal and not directly accessible via browser.
 
         - **Database admin:**  
-          http://localhost:5050
+          ```
+          http://localhost:7777
+          ```
