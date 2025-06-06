@@ -38,5 +38,5 @@
 
         - **Database admin:**  
           ```
-          http://localhost:7777
+          http://localhost:5050
           ```
